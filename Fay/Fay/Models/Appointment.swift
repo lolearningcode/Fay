@@ -37,3 +37,25 @@ struct Appointment: Codable, Identifiable {
         case recurrenceType = "recurrence_type"
     }
 }
+
+extension Appointment {
+    static func mock(
+        id: String = "demo1",
+        start: Date = Date(),
+        end: Date = Date().addingTimeInterval(3600),
+        appointmentType: String = "Follow-up",
+        provider: String = "Jane Williams, RD"
+    ) -> Appointment {
+        return Appointment(
+            appointmentID: id,
+            patientID: "1",
+            providerID: "100",
+            status: "Scheduled",
+            appointmentType: appointmentType,
+            start: start,
+            end: end,
+            durationInMinutes: 60,
+            recurrenceType: "Weekly"
+        )
+    }
+}
