@@ -33,10 +33,12 @@ class AppointmentsViewModel {
     }
 
     var upcomingAppointments: [Appointment] {
-        appointments.filter { $0.start > Date() }
+        let localNow = Date()
+        return appointments.filter { $0.start > localNow }
     }
-
+    
     var pastAppointments: [Appointment] {
-        appointments.filter { $0.start <= Date() }
+        let localNow = Date()
+        return appointments.filter { $0.start <= localNow }
     }
 }
