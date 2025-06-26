@@ -29,6 +29,7 @@ class LoginViewModel {
         do {
             let token = try await authService.login(username: username, password: password)
             self.token = token
+            UserDefaults.standard.set(token, forKey: "authToken")
             self.isLoggedIn = true
         } catch {
             self.errorMessage = error.localizedDescription
