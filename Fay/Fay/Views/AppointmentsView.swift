@@ -16,21 +16,39 @@ struct AppointmentsView: View {
 
     @State private var selectedTab: TabSelection = .upcoming
 
-    // Mock Data Placeholder
-    @State private var appointments: [Appointment] = Appointment.mockData()
+    @Bindable var viewModel: AppointmentsViewModel
+    
+    init(viewModel: AppointmentsViewModel) {
+        _viewModel = Bindable(wrappedValue: viewModel)
+    }
 
     var body: some View {
         VStack {
-            header
-            tabSwitcher
-            
-            ScrollView {
-                VStack(spacing: 16) {
-                    ForEach(filteredAppointments) { appointment in
-                        AppointmentCardView(appointment: appointment, isFirst: isFirstUpcoming(appointment))
+            if viewModel.isLoading {
+                ProgressView("Loading appointments...")
+            } else if let error = viewModel.errorMessage {
+                Text(error)
+                    .foregroundColor(.red)
+            } else {
+                header
+                tabSwitcher
+                
+                ScrollView {
+                    VStack(spacing: 16) {
+                        ForEach(filteredAppointments) { appointment in
+                            AppointmentCardView(
+                                appointment: appointment,
+                                isFirst: isFirstUpcoming(appointment)
+                            )
+                        }
                     }
+                    .padding()
                 }
-                .padding()
+            }
+        }
+        .onAppear {
+            Task {
+                await viewModel.loadAppointments()
             }
         }
     }
@@ -62,10 +80,9 @@ struct AppointmentsView: View {
     }
 
     private var filteredAppointments: [Appointment] {
-        let now = Date()
-        return appointments.filter {
-            selectedTab == .upcoming ? $0.start > now : $0.start <= now
-        }
+        selectedTab == .upcoming
+        ? viewModel.upcomingAppointments
+        : viewModel.pastAppointments
     }
 
     private func isFirstUpcoming(_ appointment: Appointment) -> Bool {
@@ -76,13 +93,41 @@ struct AppointmentsView: View {
 
 struct AppointmentsView_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            AppointmentsView()
+        let mockAppointments = [
+            Appointment(
+                appointmentID: "a1",
+                patientID: "1",
+                providerID: "100",
+                status: "Scheduled",
+                appointmentType: "Follow-up",
+                start: Date().addingTimeInterval(3600), // 1 hour from now
+                end: Date().addingTimeInterval(7200),
+                durationInMinutes: 60,
+                recurrenceType: "Weekly"
+            ),
+            Appointment(
+                appointmentID: "a2",
+                patientID: "1",
+                providerID: "100",
+                status: "Occurred",
+                appointmentType: "Initial consultation",
+                start: Date().addingTimeInterval(-7200), // 2 hours ago
+                end: Date().addingTimeInterval(-3600),
+                durationInMinutes: 60,
+                recurrenceType: "None"
+            )
+        ]
+        
+        let mockVM = AppointmentsViewModel()
+        mockVM.appointments = mockAppointments // preload mock data
+        
+        return Group {
+            AppointmentsView(viewModel: mockVM)
                 .preferredColorScheme(.light)
                 .previewDisplayName("Light Mode")
                 .previewDevice("iPhone 14 Pro")
             
-            AppointmentsView()
+            AppointmentsView(viewModel: mockVM)
                 .preferredColorScheme(.dark)
                 .previewDisplayName("Dark Mode")
                 .previewDevice("iPhone 14 Pro")

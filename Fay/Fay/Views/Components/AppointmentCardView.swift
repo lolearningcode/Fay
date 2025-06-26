@@ -29,9 +29,6 @@ struct AppointmentCardView: View {
                 VStack(alignment: .leading) {
                     Text("\(appointment.start.formatted(date: .omitted, time: .shortened)) - \(appointment.end.formatted(date: .omitted, time: .shortened))")
                         .font(.headline)
-                    Text("Follow up with \(appointment.provider)")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
                 }
                 Spacer()
             }
@@ -61,30 +58,12 @@ struct AppointmentCardView: View {
 struct AppointmentCardView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AppointmentCardView(
-                appointment: Appointment(
-                    id: "1",
-                    start: ISO8601DateFormatter().date(from: "2025-11-08T19:00:00Z")!,
-                    end: ISO8601DateFormatter().date(from: "2025-11-08T20:00:00Z")!,
-                    type: "Follow-up",
-                    provider: "Jane Williams, RD"
-                ),
-                isFirst: true
-            )
+            AppointmentCardView(appointment: .mock(), isFirst: true)
             .previewDisplayName("With Join Button")
             .padding()
             .previewLayout(.sizeThatFits)
             
-            AppointmentCardView(
-                appointment: Appointment(
-                    id: "2",
-                    start: ISO8601DateFormatter().date(from: "2025-11-24T19:00:00Z")!,
-                    end: ISO8601DateFormatter().date(from: "2025-11-24T20:00:00Z")!,
-                    type: "Follow-up",
-                    provider: "Jane Williams, RD"
-                ),
-                isFirst: false
-            )
+            AppointmentCardView(appointment: .mock(), isFirst: false)
             .previewDisplayName("Without Join Button")
             .padding()
             .previewLayout(.sizeThatFits)
