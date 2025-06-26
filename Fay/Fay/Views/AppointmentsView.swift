@@ -15,6 +15,7 @@ struct AppointmentsView: View {
     }
 
     @State private var selectedTab: TabSelection = .upcoming
+    @State private var showNewFeatureAlert = false
 
     @Bindable var viewModel: AppointmentsViewModel
     
@@ -60,11 +61,23 @@ struct AppointmentsView: View {
                 .bold()
                 .accessibilityIdentifier("appointmentsTitle")
             Spacer()
-            Button(action: {}) {
+            Button(action: {
+                showNewFeatureAlert = true
+            }) {
                 HStack {
-                    Image(systemName: "plus")
+                    Image("Icon")
+                        .renderingMode(.template)
+                        .font(.title2)
+                    
                     Text("New")
                 }
+            }
+            .accessibilityLabel("New Appointment")
+            .cornerRadius(16)
+            .alert("Coming Soon", isPresented: $showNewFeatureAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("This feature isn't ready yet. Stay tuned!")
             }
         }
         .padding([.horizontal, .top])
