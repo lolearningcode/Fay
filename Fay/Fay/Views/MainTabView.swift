@@ -17,7 +17,7 @@ struct MainTabView: View {
                     Text("Appointments")
                 }
 
-            Text("Chat")
+            ChatView()
                 .tabItem {
                     Image("Chats")
                         .renderingMode(.template)
