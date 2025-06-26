@@ -12,25 +12,29 @@ struct MainTabView: View {
         TabView {
             AppointmentsView(viewModel: AppointmentsViewModel())
                 .tabItem {
-                    Image(systemName: "calendar")
+                    Image("Calendar")
+                        .renderingMode(.template)
                     Text("Appointments")
                 }
 
             Text("Chat")
                 .tabItem {
-                    Image(systemName: "bubble.left")
+                    Image("Chats")
+                        .renderingMode(.template)
                     Text("Chat")
                 }
 
             Text("Journal")
                 .tabItem {
-                    Image(systemName: "book")
+                    Image("Journal")
+                        .renderingMode(.template)
                     Text("Journal")
                 }
 
             Text("Profile")
                 .tabItem {
-                    Image(systemName: "person")
+                    Image("User")
+                        .renderingMode(.template)
                     Text("Profile")
                 }
         }
