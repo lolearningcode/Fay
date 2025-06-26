@@ -12,7 +12,7 @@ struct AppEntryPoint: View {
 
     var body: some View {
         if loginViewModel.isLoggedIn {
-            AppointmentsView(viewModel: AppointmentsViewModel())
+            MainTabView()
         } else {
             LoginView(viewModel: loginViewModel)
         }
