@@ -24,14 +24,14 @@ struct MainTabView: View {
                     Text("Chat")
                 }
 
-            Text("Journal")
+            JournalView()
                 .tabItem {
                     Image("Journal")
                         .renderingMode(.template)
                     Text("Journal")
                 }
 
-            Text("Profile")
+            ProfileView()
                 .tabItem {
                     Image("User")
                         .renderingMode(.template)
