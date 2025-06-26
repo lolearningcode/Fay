@@ -58,6 +58,7 @@ struct AppointmentsView: View {
             Text("Appointments")
                 .font(.largeTitle)
                 .bold()
+                .accessibilityIdentifier("appointmentsTitle")
             Spacer()
             Button(action: {}) {
                 HStack {
